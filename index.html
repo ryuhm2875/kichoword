@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>류봉두와 함께하는 기초 국어 튼튼 레벨업!</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+  --green:#58cc02;--green-d:#58a700;--green-l:#d7ffb8;
+  --red:#ff4b4b;--red-d:#ea2b2b;--red-l:#ffdfe0;
+  --blue:#1cb0f6;--blue-d:#1899d6;
+  --yellow:#ffc800;--yellow-d:#e6b400;
+  --purple:#ce82ff;
+  --gray-1:#f7f7f7;--gray-2:#e5e5e5;--gray-3:#afafaf;--gray-4:#777;--gray-5:#3c3c3c;
+  --bg:#fff;
+}
+html,body{height:100%;background:var(--bg);font-family:'Nunito','Apple SD Gothic Neo',-apple-system,BlinkMacSystemFont,'Segoe UI',Pretendard,Roboto,sans-serif;color:var(--gray-5);overflow-x:hidden;-webkit-text-size-adjust:100%}
+#app{max-width:520px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;position:relative}
+button{font-family:inherit;border:none;cursor:pointer;font-weight:800}
+
+/* 듀오링고 3D 푸시 버튼 */
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:14px 24px;border-radius:14px;font-size:16px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;transition:transform .05s,box-shadow .05s;user-select:none}
+.btn-primary{background:var(--green);color:#fff;box-shadow:0 4px 0 var(--green-d)}
+.btn-primary:active{transform:translateY(2px);box-shadow:0 2px 0 var(--green-d)}
+.btn-primary:disabled{background:var(--gray-2);color:var(--gray-3);box-shadow:0 4px 0 #d0d0d0;cursor:not-allowed}
+.btn-blue{background:var(--blue);color:#fff;box-shadow:0 4px 0 var(--blue-d)}
+.btn-blue:active{transform:translateY(2px);box-shadow:0 2px 0 var(--blue-d)}
+.btn-red{background:var(--red);color:#fff;box-shadow:0 4px 0 var(--red-d)}
+.btn-red:active{transform:translateY(2px);box-shadow:0 2px 0 var(--red-d)}
+.btn-ghost{background:#fff;color:var(--gray-4);border:2px solid var(--gray-2);box-shadow:0 4px 0 var(--gray-2)}
+.btn-ghost:active{transform:translateY(2px);box-shadow:0 2px 0 var(--gray-2)}
+
+/* 홈 화면 */
+.home{padding:24px 20px;display:flex;flex-direction:column;gap:20px;min-height:100vh}
+.home-header{text-align:center;margin-top:12px}
+.mascot{font-size:64px;margin-bottom:8px}
+.home h1{font-size:22px;color:var(--gray-5);line-height:1.3}
+.home h1 span{color:var(--green-d)}
+.home .sub{color:var(--gray-4);font-size:14px;margin-top:6px}
+
+.name-box{background:var(--gray-1);border:2px solid var(--gray-2);border-radius:16px;padding:16px}
+.name-box label{display:block;font-size:13px;color:var(--gray-4);font-weight:700;margin-bottom:8px}
+.name-box input{width:100%;padding:14px 16px;border:2px solid var(--gray-2);border-radius:12px;font-size:16px;font-weight:700;background:#fff;outline:none}
+.name-box input:focus{border-color:var(--blue)}
+.name-status{font-size:12px;color:var(--gray-4);margin-top:8px;text-align:right}
+.name-status.ok{color:var(--green-d)}
+
+.stages-title{font-size:14px;color:var(--gray-4);font-weight:800;margin:8px 0 -8px;letter-spacing:1px}
+.stages{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.stage-card{background:#fff;border:2px solid var(--gray-2);border-radius:16px;padding:16px 12px;text-align:center;box-shadow:0 4px 0 var(--gray-2);transition:transform .05s,box-shadow .05s;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px}
+.stage-card:active{transform:translateY(2px);box-shadow:0 2px 0 var(--gray-2)}
+.stage-card.locked{opacity:.45;cursor:not-allowed;background:var(--gray-1)}
+.stage-num{font-size:13px;color:var(--gray-3);font-weight:800}
+.stage-card.active .stage-num{color:var(--green-d)}
+.stage-icon{font-size:32px;line-height:1}
+.stage-name{font-size:13px;color:var(--gray-5);font-weight:800;line-height:1.3;min-height:32px;display:flex;align-items:center}
+
+/* 단계 진행 화면 */
+.play{padding:16px;min-height:100vh;display:flex;flex-direction:column}
+.play-top{display:flex;align-items:center;gap:12px;margin-bottom:24px}
+.close-btn{background:none;border:none;font-size:24px;color:var(--gray-3);cursor:pointer;padding:4px 8px;line-height:1}
+.progress-bar{flex:1;height:14px;background:var(--gray-2);border-radius:99px;overflow:hidden}
+.progress-fill{height:100%;background:var(--green);border-radius:99px;transition:width .3s ease;position:relative}
+.progress-fill::after{content:"";position:absolute;top:3px;left:6px;right:6px;height:3px;background:rgba(255,255,255,.5);border-radius:99px}
+.hearts{display:flex;align-items:center;gap:4px;color:var(--red);font-weight:800}
+.hearts span{font-size:18px}
+.hearts em{font-size:14px;font-style:normal;color:var(--red)}
+
+.section-label{font-size:11px;color:var(--gray-4);font-weight:800;letter-spacing:1px;margin-bottom:8px}
+.q-title{font-size:22px;font-weight:800;color:var(--gray-5);line-height:1.4;margin-bottom:20px}
+.q-sentence{font-size:18px;line-height:1.7;color:var(--gray-5);background:var(--gray-1);padding:18px;border-radius:14px;font-weight:700;border:2px solid var(--gray-2);margin-bottom:24px}
+.blank{display:inline-block;min-width:48px;border-bottom:3px solid var(--gray-3);text-align:center;color:var(--blue-d);font-weight:800;padding:0 6px}
+
+.options{display:flex;flex-direction:column;gap:12px;flex:1}
+.opt{background:#fff;border:2px solid var(--gray-2);border-radius:14px;padding:18px 16px;font-size:18px;color:var(--gray-5);text-align:center;box-shadow:0 4px 0 var(--gray-2);transition:transform .05s,box-shadow .05s;font-weight:800}
+.opt:active{transform:translateY(2px);box-shadow:0 2px 0 var(--gray-2)}
+.opt.selected{background:#ddf4ff;border-color:var(--blue);color:var(--blue-d);box-shadow:0 4px 0 var(--blue)}
+
+.dict-area{display:flex;flex-direction:column;gap:14px;flex:1}
+.dict-controls{display:flex;gap:8px;flex-wrap:wrap}
+.dict-btn{padding:12px 16px;border-radius:12px;background:var(--blue);color:#fff;font-size:14px;font-weight:800;box-shadow:0 3px 0 var(--blue-d);flex:1;min-width:100px}
+.dict-btn:active{transform:translateY(2px);box-shadow:0 1px 0 var(--blue-d)}
+.dict-btn.alt{background:#fff;color:var(--blue);border:2px solid var(--blue);box-shadow:0 3px 0 var(--blue)}
+.dict-input{width:100%;padding:16px;border:3px solid var(--gray-2);border-radius:14px;font-size:18px;font-weight:700;outline:none;font-family:inherit}
+.dict-input:focus{border-color:var(--blue)}
+.dict-hint{font-size:13px;color:var(--gray-4);text-align:center}
+
+/* 하단 피드백 푸터 */
+.feedback{position:fixed;left:0;right:0;bottom:-300px;background:#fff;border-top:2px solid var(--gray-2);padding:20px;transition:bottom .3s ease;z-index:10;max-width:520px;margin:0 auto}
+.feedback.show{bottom:0}
+.feedback.correct{background:var(--green-l);border-top-color:var(--green)}
+.feedback.wrong{background:var(--red-l);border-top-color:var(--red)}
+.fb-head{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.fb-icon{font-size:32px}
+.fb-title{font-size:20px;font-weight:800}
+.feedback.correct .fb-title{color:var(--green-d)}
+.feedback.wrong .fb-title{color:var(--red-d)}
+.fb-detail{font-size:14px;color:var(--gray-5);line-height:1.5;margin-bottom:14px}
+.fb-detail strong{color:var(--green-d);font-weight:800}
+.feedback.wrong .fb-detail strong{color:var(--red-d)}
+.fb-btn{width:100%;padding:14px;border-radius:14px;font-size:16px;color:#fff;font-weight:800;letter-spacing:1px;text-transform:uppercase}
+.feedback.correct .fb-btn{background:var(--green);box-shadow:0 4px 0 var(--green-d)}
+.feedback.wrong .fb-btn{background:var(--red);box-shadow:0 4px 0 var(--red-d)}
+.fb-btn:active{transform:translateY(2px)}
+
+/* 인트로 화면 */
+.intro{padding:24px 20px;text-align:center;display:flex;flex-direction:column;justify-content:center;flex:1;min-height:100vh;gap:14px}
+.intro-icon{font-size:80px;margin-bottom:8px}
+.intro h2{font-size:24px;color:var(--gray-5);margin-bottom:6px}
+.intro p{font-size:15px;color:var(--gray-4);line-height:1.6;margin-bottom:8px}
+.intro-cards{display:flex;justify-content:center;gap:10px;margin:12px 0}
+.intro-card{background:var(--gray-1);border:2px solid var(--gray-2);border-radius:12px;padding:12px 16px;flex:1;max-width:140px}
+.intro-card .n{font-size:24px;font-weight:800;color:var(--blue-d)}
+.intro-card .l{font-size:11px;color:var(--gray-4);font-weight:700;margin-top:2px}
+
+/* 결과 화면 */
+.result{padding:24px 20px;min-height:100vh;display:flex;flex-direction:column;gap:18px}
+.result-top{text-align:center;padding:24px 0}
+.result-emoji{font-size:80px;margin-bottom:8px}
+.result-title{font-size:24px;font-weight:800;color:var(--gray-5);margin-bottom:6px}
+.result-level{display:inline-block;background:var(--yellow);color:#5a4500;padding:8px 16px;border-radius:99px;font-weight:800;font-size:16px;margin-top:8px;box-shadow:0 3px 0 var(--yellow-d)}
+.result-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.stat-card{background:var(--gray-1);border-radius:14px;padding:14px 8px;text-align:center;border:2px solid var(--gray-2)}
+.stat-n{font-size:22px;font-weight:800;color:var(--gray-5)}
+.stat-l{font-size:11px;color:var(--gray-4);font-weight:700;margin-top:4px}
+
+.review-section h3{font-size:16px;color:var(--gray-5);margin-bottom:10px;font-weight:800}
+.review-list{display:flex;flex-direction:column;gap:10px;max-height:340px;overflow-y:auto}
+.review-item{background:#fff;border:2px solid var(--red-l);border-left:4px solid var(--red);border-radius:10px;padding:12px}
+.review-q{font-size:14px;color:var(--gray-5);font-weight:700;line-height:1.5;margin-bottom:8px}
+.review-row{display:flex;gap:8px;font-size:13px;line-height:1.4;margin-top:4px}
+.review-row .k{color:var(--gray-4);font-weight:800;min-width:48px}
+.review-row.my .v{color:var(--red-d);font-weight:700;text-decoration:line-through}
+.review-row.ans .v{color:var(--green-d);font-weight:800}
+.review-explain{background:var(--yellow);color:#5a4500;border-radius:8px;padding:8px 10px;font-size:12px;font-weight:700;margin-top:8px;line-height:1.5;white-space:pre-line}
+
+.result-actions{display:flex;flex-direction:column;gap:10px;margin-top:8px;padding-bottom:24px}
+
+/* 게임오버 모달 */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.4);display:none;align-items:center;justify-content:center;z-index:20;padding:20px}
+.modal-bg.show{display:flex}
+.modal{background:#fff;border-radius:18px;padding:28px 24px;text-align:center;max-width:340px;width:100%}
+.modal-icon{font-size:64px;margin-bottom:8px}
+.modal h3{font-size:22px;color:var(--gray-5);margin-bottom:8px}
+.modal p{font-size:14px;color:var(--gray-4);margin-bottom:18px;line-height:1.5}
+.modal-actions{display:flex;flex-direction:column;gap:8px}
+
+/* 토스트 */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--gray-5);color:#fff;padding:12px 20px;border-radius:99px;font-size:14px;font-weight:700;z-index:30;opacity:0;transition:opacity .3s}
+/* 모드 선택 */
+.mode-section{margin-top:16px;width:100%}
+.mode-title{font-size:13px;font-weight:800;color:var(--gray-4);margin-bottom:8px;text-align:left;padding-left:4px}
+.mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mode-card{background:#fff;border:2px solid var(--gray-2);border-radius:12px;padding:12px 10px;cursor:pointer;text-align:center;transition:all .15s}
+.mode-card .mc-name{font-size:14px;font-weight:800;color:var(--gray-5);margin-bottom:4px}
+.mode-card .mc-desc{font-size:11px;color:var(--gray-4);font-weight:600;line-height:1.3}
+.mode-card.active{border-color:var(--blue);background:#e8f7ff}
+.mode-card.active .mc-name{color:var(--blue-d)}
+.mode-badge{display:inline-block;background:var(--blue);color:#fff;padding:4px 10px;border-radius:99px;font-size:11px;font-weight:800;margin-left:6px}
+.mode-badge.challenge{background:var(--red)}
+.practice-pill{background:var(--blue-d);color:#fff;padding:6px 12px;border-radius:99px;font-size:12px;font-weight:800;display:inline-flex;align-items:center;gap:4px}
+
+.toast.show{opacity:1}
+
+/* 텍스트 강조 */
+.kbd{display:inline-block;background:#fff;border:1.5px solid var(--gray-2);border-radius:6px;padding:1px 8px;font-weight:800;color:var(--gray-5);font-size:14px;margin:0 2px}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div class="modal-bg" id="modal"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ========== 설정 ========== */
+const CONFIG = {
+  APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbyhpAQgl0-cO14yYp8nt8ruiBawGLyhWb25f03gG4BlNkSWWvg_7tOpcgcIQWfVKbM4/exec",
+  HEARTS: 5,
+  CHALLENGE_HEARTS: 5,
+  PRACTICE_HEARTS: 9999
+};
+
+/* ========== 문항 은행 (검수 완료) ==========
+   각 항목: [질문, 선택지A(정답), 선택지B(오답), 정답인덱스(0), 해설]
+*/
+const STAGES = [
+  {id:1,name:"ㅔ vs ㅐ 기초",sp:[
+    ["바다에서 ___를 잡았다.","게","개","정답: 게 (바다에 사는 갑각류, 옆으로 걷는 동물)\n오답: 개 (멍멍 짖는 강아지)\n구분: 바닷가에서 잡는 건 '게', 집에서 키우는 건 '개'\n예) 꽃게를 잡았다 / 강아지(개)가 짖는다"],
+    ["우리집 ___는 꼬리를 흔든다.","개","게","정답: 개 (사람을 잘 따르는 반려동물, 강아지)\n오답: 게 (바다에 사는 갑각류)\n구분: 꼬리를 흔드는 건 '개', 집게발이 있는 건 '게'\n예) 우리 개는 똑똑하다 / 게가 모래밭을 기어간다"],
+    ["신발끈을 단단히 ___었다.","매","메","정답: 매다 (끈·줄을 묶는 동작)\n오답: 메다 (어깨에 걸치는 동작)\n외우기: '끈은 매다, 가방은 메다'\n예) 운동화 끈을 매다 / 책가방을 메다"],
+    ["무거운 가방을 어깨에 ___었다.","메","매","정답: 메다 (어깨에 걸치는 동작)\n오답: 매다 (끈·줄을 묶는 동작)\n외우기: 어깨에 올리는 건 '메', 끈으로 묶는 건 '매'\n예) 배낭을 메다 / 넥타이를 매다"],
+    ["톱으로 나무를 ___었다.","베","배","정답: 베다 (날카로운 것으로 자르는 동작)\n오답: 배 (사람의 신체 부위 또는 과일 '배')\n구분: 자르는 동작은 '베다', 신체·과일은 '배'\n예) 풀을 베다 / 배가 부르다"],
+    ["과식해서 ___가 너무 부르다.","배","베","정답: 배 (사람의 신체 부위, 음식이 들어가는 곳)\n오답: 베다 (자르는 동작)\n구분: 신체 부위는 '배', 자르는 동작은 '베다'\n예) 배가 아프다 / 칼로 베다"],
+    ["하늘을 나는 ___를 보았다.","새","세","정답: 새 (날아다니는 동물, 조류)\n오답: 세 (숫자 3을 뜻하는 우리말)\n구분: 날아다니면 '새', 개수를 세면 '세'\n예) 참새가 날다 / 사과 세 개"],
+    ["사과 ___ 개를 샀다.","세","새","정답: 세 (숫자 3, 개수를 셀 때 쓰는 말)\n오답: 새 (날아다니는 동물)\n구분: 개수를 셀 때는 '세', 날아다니는 건 '새'\n예) 연필 세 자루 / 새가 지저귄다"],
+    ["손에 ___가 잔뜩 묻어 새카맣다.","때","떼","정답: 때 (몸·옷에 묻은 더러움)\n오답: 떼 (여럿이 모인 무리)\n구분: 더러움은 '때', 무리는 '떼'\n예) 손에 때가 묻다 / 양 떼가 풀을 뜯다"],
+    ["풀밭에서 양 ___가 풀을 뜯고 있다.","떼","때","정답: 떼 (여럿이 함께 모인 무리)\n오답: 때 (몸에 묻은 더러움)\n구분: 무리는 '떼', 더러움은 '때'\n예) 새 떼가 날다 / 옷에 때가 묻다"],
+    ["선생님이 부르자 \"___\"라고 대답했다.","네","내","정답: 네 (긍정의 대답, '예'와 같은 뜻)\n오답: 내 (나의 줄임말)\n구분: 대답은 '네', 소유는 '내'\n예) \"네, 알겠습니다\" / 내 가방"],
+    ["나는 14살이야. 오늘은 ___ 생일이거든.","내","네","정답: 내 (나의 줄임말, 말하는 사람 자신)\n오답: 네 (너의 줄임말 또는 대답)\n구분: '나의'는 '내', '너의'는 '네'\n예) 내 책 / 네 책"],
+    ["민수야, ___ 가방 좀 잠깐 빌려줄래?","네","내","정답: 네 (너의 줄임말, 상대방의 것)\n오답: 내 (나의 줄임말)\n구분: 상대(민수)에게 묻고 있으니 '네=너의'\n※ 발음이 비슷해도 '누구의 것?'을 따져 보면 답이 보여요\n예) 네 책 좀 빌려줘 / 내 책은 여기 있어"],
+    ["___가 처마 밑에 집을 지었다.","제비","재비","정답: 제비 (봄에 날아오는 작은 새)\n오답: 재비 (사전에 없는 잘못된 표기)\n외우기: '제비'는 표준어, '재비'는 틀린 말\n예) 제비가 돌아오다 / 제비집을 짓다"],
+    ["푹신한 ___를 베고 잤다.","베개","배개","정답: 베개 (잘 때 머리 밑에 받치는 물건)\n오답: 배개 (사전에 없는 잘못된 표기)\n외우기: '베다(머리를 받치다)'에서 온 말이라 '베개'\n예) 베개를 베다 / 푹신한 베개"],
+    ["학교 ___에 공지가 붙었다.","게시판","개시판","정답: 게시판 (글이나 공지를 붙여 놓는 판)\n오답: 개시판 (사전에 없는 잘못된 표기)\n외우기: 한자 '게시(揭示)'에서 온 말이라 '게시판'\n예) 알림이 게시판에 붙다 / 학급 게시판"],
+    ["___가 보글보글 끓고 있다.","찌개","찌게","정답: 찌개 (국물에 재료를 넣고 끓인 음식)\n오답: 찌게 (틀린 표기, 사전에 없음)\n외우기: '찌개'가 표준어 — 식당 메뉴판도 자주 틀리니 주의!\n예) 김치찌개 / 된장찌개"],
+    ["편의점에서 물건 값을 카드로 ___했다.","결제","결재","정답: 결제 (돈을 주고받아 거래를 끝냄)\n오답: 결재 (윗사람이 서류를 승인함)\n구분: 돈 거래는 '결제(濟)', 서류 승인은 '결재(裁)'\n예) 카드 결제 / 부장님 결재"],
+    ["사장님께 보고서 ___를 받았다.","결재","결제","정답: 결재 (윗사람이 서류를 검토하고 승인함)\n오답: 결제 (돈을 주고받음)\n구분: 서류 도장은 '결재', 돈 거래는 '결제'\n예) 결재 서류 / 카드 결제"],
+    ["___가 여름 내내 시끄럽게 울었다.","매미","메미","정답: 매미 (여름에 우는 곤충)\n오답: 메미 (사전에 없는 잘못된 표기)\n외우기: '매미'가 표준어 — 발음에 휘둘리지 말기\n예) 매미 소리 / 매미가 울다"]
+  ],dt:[
+    "바다에서 게를 잡았다.",
+    "가방을 어깨에 메었다.",
+    "신발끈을 단단히 매었다.",
+    "새가 하늘을 난다.",
+    "사과 세 개를 샀다.",
+    "베개를 베고 잤다.",
+    "학교 게시판에 공지가 붙었다.",
+    "카드로 결제를 했다.",
+    "사장님께 결재를 받았다.",
+    "찌개가 맛있게 끓는다."
+  ]},
+  {id:2,name:"받침 있다 없다",sp:[
+    ["책상 위에 책이 ___.","있다","잇다","정답: 있다 (어떤 자리에 존재함, 머묾)\n오답: 잇다 (떨어진 것을 연결함)\n구분: '존재'는 있다, '연결'은 잇다\n예) 집에 있다 / 끊어진 끈을 잇다"],
+    ["끊어진 두 끈을 다시 ___.","잇다","있다","정답: 잇다 (떨어진 것을 서로 붙이거나 연결함)\n오답: 있다 (존재함)\n구분: '연결'은 잇다, '존재'는 있다\n예) 줄을 잇다 / 교실에 있다"],
+    ["어제 친구네 집에 ___.","갔다","같다","정답: 갔다 ('가다'의 과거형, 이동을 뜻함)\n오답: 같다 (서로 비슷하거나 동일함)\n구분: 움직임은 '가-', 비교는 '같-'\n예) 학교에 갔다 / 키가 같다"],
+    ["형과 동생의 키가 똑같이 ___.","같다","갔다","정답: 같다 (서로 차이 없이 동일함)\n오답: 갔다 (이동의 과거형)\n구분: 비교는 '같-', 움직임은 '가-'\n예) 마음이 같다 / 학교에 갔다"],
+    ["강아지가 사납게 ___.","짖다","짓다","정답: 짖다 (개가 소리내어 우는 동작)\n오답: 짓다 (집·옷·밥 등을 만듦)\n구분: 개 소리는 '짖-', 만드는 건 '짓-'\n예) 개가 짖다 / 집을 짓다"],
+    ["할머니가 새 한복을 ___.","짓다","짖다","정답: 짓다 (옷·집·밥 등을 만듦)\n오답: 짖다 (개가 소리내어 욺)\n구분: 만드는 건 '짓-', 개 소리는 '짖-'\n예) 옷을 짓다 / 강아지가 짖다"],
+    ["바람이 불어 문을 ___.","닫다","닿다","정답: 닫다 (열린 것을 막음)\n오답: 닿다 (어디에 가서 붙거나 미침)\n구분: 막는 건 '닫-', 가닿는 건 '닿-'\n예) 창문을 닫다 / 손이 천장에 닿다"],
+    ["손끝이 천장에 겨우 ___.","닿다","닫다","정답: 닿다 (어떤 곳에 가서 붙거나 미침)\n오답: 닫다 (열린 것을 막음)\n구분: 가닿는 건 '닿-', 막는 건 '닫-'\n예) 발끝이 닿다 / 문을 닫다"],
+    ["할머니가 송편을 예쁘게 ___.","빚다","빗다","정답: 빚다 (반죽·흙으로 모양을 만듦)\n오답: 빗다 (빗으로 머리를 정리함)\n구분: 만드는 건 '빚-', 머리 손질은 '빗-'\n예) 만두를 빚다 / 머리를 빗다"],
+    ["거울 앞에서 머리를 곱게 ___.","빗다","빚다","정답: 빗다 (빗으로 머리카락을 정리함)\n오답: 빚다 (반죽·흙으로 모양을 만듦)\n구분: 머리 손질은 '빗-', 만드는 건 '빚-'\n예) 머리를 빗다 / 송편을 빚다"],
+    ["짐을 단단히 끈으로 ___.","묶다","묵다","정답: 묶다 (끈·줄로 한데 매어 풀어지지 않게 함)\n오답: 묵다 (어느 곳에서 잠시 머묾, 자고 감)\n구분: 매는 건 '묶-', 머무는 건 '묵-'\n예) 책을 묶다 / 친척집에 묵다"],
+    ["여행 가서 친척 집에서 하룻밤 ___.","묵다","묶다","정답: 묵다 (어떤 곳에 머물러 잠을 잠)\n오답: 묶다 (끈으로 매다)\n구분: 머무는 건 '묵-', 매는 건 '묶-'\n예) 호텔에 묵다 / 짐을 묶다"],
+    ["사과 껍질을 칼로 ___.","깎다","깍다","정답: 깎다 (칼·기계로 겉을 얇게 벗겨냄)\n오답: 깍다 (사전에 없는 잘못된 표기)\n외우기: 받침 'ㄲ'이 들어가는 '깎다'가 표준\n예) 연필을 깎다 / 머리를 깎다"],
+    ["벽돌을 차곡차곡 높이 ___.","쌓다","싸다","정답: 쌓다 (물건을 차곡차곡 포개어 올림)\n오답: 싸다 (물건을 종이·천으로 둘러쌈)\n구분: 위로 올리는 건 '쌓-', 감싸는 건 '싸-'\n예) 책을 쌓다 / 선물을 싸다"],
+    ["우리집 천장이 무척 ___.","낮다","낫다","정답: 낮다 (위치가 아래에 있음, 높지 않음)\n오답: 낫다 (병이 회복됨, 더 좋음)\n구분: 높이는 '낮-', 회복·비교는 '낫-'\n예) 천장이 낮다 / 감기가 낫다"],
+    ["잃어버린 지갑을 책상 밑에서 ___.","찾았다","찼다","정답: 찾았다 (잃어버린 것을 다시 발견함)\n오답: 찼다 (가득 차다 / 발로 차다)\n구분: 발견은 '찾-', 가득 참·차기는 '차-'\n예) 지갑을 찾다 / 공을 차다"],
+    ["운동장에 사람이 가득 ___.","찼다","찾다","정답: 찼다 (어떤 공간에 가득 들어참)\n오답: 찾다 (잃은 것을 발견함)\n구분: 가득 참은 '차-', 발견은 '찾-'\n예) 운동장이 차다 / 책을 찾다"],
+    ["골키퍼가 강한 슛을 막아 ___.","막았다","맞았다","정답: 막았다 (공격이 들어오지 못하게 함)\n오답: 맞았다 (정답이 맞음 / 매를 맞음)\n구분: 방어는 '막-', 맞음·정답은 '맞-'\n예) 슛을 막다 / 정답이 맞다"],
+    ["정답이 정확히 ___.","맞다","막다","정답: 맞다 (틀리지 않고 옳음)\n오답: 막다 (들어오지 못하게 함)\n구분: 옳음은 '맞-', 방어는 '막-'\n예) 답이 맞다 / 길을 막다"],
+    ["트럭에 무거운 짐을 ___.","싣다","식다","정답: 싣다 (차·배 등에 짐을 올림)\n오답: 식다 (뜨거운 것이 차가워짐)\n구분: 짐을 올리는 건 '싣-', 온도가 내려가는 건 '식-'\n예) 짐을 싣다 / 국이 식다"]
+  ],dt:[
+    "책상 위에 책이 있다.",
+    "어제 학교에 갔다.",
+    "두 사람의 키가 같다.",
+    "강아지가 멍멍 짖는다.",
+    "할머니가 한복을 짓는다.",
+    "사과 껍질을 깎는다.",
+    "어머니가 떡을 빚으신다.",
+    "잃어버린 지갑을 찾았다.",
+    "정답이 맞다.",
+    "트럭에 짐을 싣는다."
+  ]},
+  {id:3,name:"돼·되 / 안·않",sp:[
+    ["열심히 노력해서 의사가 ___.","됐다","됬다","정답: 됐다 ('되었다'의 줄임말, '되어'에서 '돼')\n오답: 됬다 (사전에 없는 잘못된 표기)\n외우기: '되어→돼' / '되었다→됐다'로 줄어드는 형태가 표준\n예) 의사가 됐다 / 시간이 다 됐다"],
+    ["약속 시간이 다 ___.","됐어","됬어","정답: 됐어 ('되었어'의 줄임말)\n오답: 됬어 (사전에 없는 잘못된 표기)\n외우기: '되어→돼', '되었어→됐어'\n예) 시간이 됐어 / 준비가 됐어"],
+    ["선생님, 이제 가도 ___?","돼","되","정답: 돼 ('되어'의 줄임말, 문장을 끝맺을 수 있음)\n오답: 되 (혼자서는 문장을 끝낼 수 없음)\n외우기: '하'와 '해'로 바꿔 보기 — '해'가 되면 '돼'\n예) 가도 돼? (가도 해?) / 가도 된다 (가도 한다)"],
+    ["여기 앉아도 ___.","돼","되","정답: 돼 ('되어'의 줄임말, 문장 끝맺기 가능)\n오답: 되 (어간만으로는 끝맺을 수 없음)\n외우기: '해'로 바꿔서 말이 되면 '돼'\n예) 앉아도 돼 / 만져도 돼"],
+    ["나도 곧 어른이 ___ 거야.","될","됄","정답: 될 ('되-'에 'ㄹ'이 붙은 미래 표현)\n오답: 됄 (사전에 없는 잘못된 표기)\n외우기: '하-'에 'ㄹ' 붙이면 '할', '되-'에 'ㄹ' 붙이면 '될'\n예) 어른이 될 거야 / 도움이 될 거야"],
+    ["우리 진짜 친구가 ___ 싶다.","되고","돼고","정답: 되고 (어간 '되-'에 어미 '-고')\n오답: 돼고 (사전에 없는 잘못된 표기)\n외우기: '하고'와 같은 자리에는 '되고'\n예) 친구가 되고 싶다 / 어른이 되고 싶다"],
+    ["오늘은 학교에 ___ 갔다.","안","않","정답: 안 (부정의 부사, '아니'의 줄임말, 띄어 씀)\n오답: 않 ('아니하-'의 줄임, 다른 단어 뒤에 붙음)\n구분: 동사 앞에 따로 쓰는 건 '안', '∼지 않다'처럼 붙는 건 '않'\n예) 안 갔다 / 가지 않았다"],
+    ["밥을 먹지 ___았다.","않","안","정답: 않 ('-지 않다' 형태로 동사 뒤에 붙음)\n오답: 안 (단독 부사로 동사 앞에 띄어 씀)\n구분: '∼지 않-'은 한 단어처럼 붙여 씀\n예) 먹지 않았다 / 가지 않는다"],
+    ["숙제를 깜빡 잊어서 ___ 했다.","안","않","정답: 안 (동사 앞에서 부정을 나타냄, 띄어 씀)\n오답: 않 ('-지 않-' 자리에만 씀)\n구분: 동사 바로 앞에 떨어져 있으면 '안'\n예) 안 했다 / 안 먹었다"],
+    ["그는 거짓말을 절대 하지 ___는다.","않","안","정답: 않 ('-지 않-' 형태, 앞말에 붙여 씀)\n오답: 안 (혼자 쓰일 때만 '안')\n구분: '하지 않는다'처럼 '-지' 뒤에는 '않'\n예) 하지 않는다 / 보지 않는다"],
+    ["오늘은 비가 ___ 와서 다행이다.","안","않","정답: 안 (동사 '와서' 앞의 부정 부사)\n오답: 않 ('-지 않-' 자리에만 씀)\n구분: 동사 앞에 띄어 쓰면 '안'\n예) 비가 안 온다 / 눈이 안 내린다"],
+    ["공부를 ___ 하면 나중에 후회한다.","안","않","정답: 안 (동사 '하면' 앞의 부정 부사)\n오답: 않 ('-지 않-' 형태에만 씀)\n구분: '안 하다' = 띄어 씀, '하지 않다' = 붙여 씀\n예) 안 하면 / 하지 않으면"],
+    ["그 책은 별로 재미있지 ___다.","않","안","정답: 않 ('재미있지 않다' = '-지 않다' 형태)\n오답: 안 ('-지' 뒤에는 쓸 수 없음)\n구분: 형용사 뒤 '-지 않-'에도 '않'\n예) 재미있지 않다 / 좋지 않다"],
+    ["이러면 ___ 돼.","안","않","정답: 안 (동사 '돼' 앞의 부정 부사, 띄어 씀)\n오답: 않 ('-지 않-' 자리에만 씀)\n외우기: '안 돼'는 항상 띄어 씀 (안+돼)\n예) 그러면 안 돼 / 늦으면 안 돼"],
+    ["약속을 절대 잊지 ___을게.","않","안","정답: 않 ('잊지 않을게' = '-지 않-' 형태)\n오답: 안 ('-지' 뒤에는 쓸 수 없음)\n구분: '-지 않을게'는 한 덩어리\n예) 잊지 않을게 / 늦지 않을게"],
+    ["친구의 비밀을 다른 사람에게 말하면 ___ 돼.","안","않","정답: 안 ('안 돼' = 부정 부사 + 동사, 띄어 씀)\n오답: 않 ('-지' 뒤가 아니므로 쓸 수 없음)\n외우기: '안 돼'는 항상 두 글자 띄어 쓰기\n예) 거짓말하면 안 돼 / 늦으면 안 돼"],
+    ["일이 잘 ___?","됐어","됬어","정답: 됐어 ('되었어'의 줄임말)\n오답: 됬어 (사전에 없는 잘못된 표기)\n외우기: '되어→돼', '되었어→됐어' 공식\n예) 다 됐어 / 잘 됐어"],
+    ["너무 늦게 자면 ___.","안 돼","않 돼","정답: 안 돼 (부정 부사 '안' + 동사 '돼', 띄어 씀)\n오답: 않 돼 ('않'은 '-지' 뒤에만 씀)\n외우기: '안 돼'는 항상 띄어 쓰는 두 단어\n예) 늦으면 안 돼 / 그러면 안 돼"],
+    ["그는 아침을 거의 ___.","안 먹는다","않 먹는다","정답: 안 먹는다 (부사 '안' + 동사 '먹는다', 띄어 씀)\n오답: 않 먹는다 ('않'은 '먹지 않는다'처럼 '-지' 뒤에만)\n구분: 동사 앞=안, '-지' 뒤=않\n예) 안 먹는다 / 먹지 않는다"],
+    ["내 동생은 거짓말을 ___.","안 한다","않 한다","정답: 안 한다 (부사 '안' + 동사 '한다', 띄어 씀)\n오답: 않 한다 ('하지 않는다'처럼 '-지' 뒤에만 '않')\n구분: 동사 바로 앞은 '안', '-지' 뒤는 '않'\n예) 안 한다 / 하지 않는다"]
+  ],dt:[
+    "이제 가도 돼.",
+    "시간이 다 됐다.",
+    "오늘은 학교에 안 갔다.",
+    "공부를 하지 않는다.",
+    "너무 늦으면 안 돼.",
+    "약속을 잊지 않을게.",
+    "비가 안 와서 다행이다.",
+    "거짓말을 하지 않는다.",
+    "곧 어른이 될 거야.",
+    "친구가 되고 싶다."
+  ]},
+  {id:4,name:"왠·웬 / 로서·로써",sp:[
+    ["___ 오늘은 기분이 좋다.","왠지","웬지","정답: 왠지 ('왜인지'의 줄임말, 이유 모를 때)\n오답: 웬지 (사전에 없는 잘못된 표기)\n외우기: '왜인지=왠지'만 표준어, '왠'은 이때만 씀\n예) 왠지 슬프다 / 왠지 기분이 좋다"],
+    ["___ 네가 여기에 다 오다니!","웬일이야","왠일이야","정답: 웬일이야 ('어찌 된 일'을 뜻함)\n오답: 왠일이야 (사전에 없는 잘못된 표기)\n외우기: '웬'은 '어떠한, 어찌 된'의 뜻 — '왠지' 빼고는 다 '웬'\n예) 웬일이야 / 웬 사람이야"],
+    ["갑자기 이게 ___ 떡이야?","웬","왠","정답: 웬 ('어떠한, 어찌 된'을 뜻하는 관형사)\n오답: 왠 ('왠지' 한 단어에만 쓰는 글자)\n외우기: 명사 앞 = 웬 / '왠'은 '왠지' 하나만\n예) 웬 떡이야 / 웬 사람"],
+    ["___ 그냥 참고 넘어가라.","웬만하면","왠만하면","정답: 웬만하면 ('정도가 보통이면, 가능하면')\n오답: 왠만하면 (사전에 없는 잘못된 표기)\n외우기: '왠지'를 빼고는 거의 다 '웬'\n예) 웬만하면 참아라 / 웬만큼 해라"],
+    ["길에서 ___ 사람이 말을 걸었다.","웬","왠","정답: 웬 ('어떤, 알지 못하는'의 뜻)\n오답: 왠 ('왠지'에만 쓰는 글자)\n외우기: 명사 앞에 오는 건 무조건 '웬'\n예) 웬 사람 / 웬 일"],
+    ["시험을 잘 봐서 ___ 뿌듯하다.","왠지","웬지","정답: 왠지 ('왜인지'의 줄임말, 이유를 정확히 모름)\n오답: 웬지 (사전에 없는 잘못된 표기)\n외우기: '왠지' 한 단어만 '왠'을 씀\n예) 왠지 뿌듯하다 / 왠지 모르게"],
+    ["___, 결과가 더 좋게 나왔다.","웬걸","왠걸","정답: 웬걸 ('웬 것을'의 줄임, 뜻밖의 일을 나타냄)\n오답: 왠걸 (사전에 없는 잘못된 표기)\n외우기: '왠지' 외엔 다 '웬'\n예) 웬걸, 의외였다 / 웬걸, 놀랐다"],
+    ["학생___의 본분을 다하자.","으로서","으로써","정답: 으로서 (자격·신분을 나타냄)\n오답: 으로써 (수단·도구를 나타냄)\n구분: '∼인 입장에서'=로서, '∼을 가지고'=로써\n예) 학생으로서 / 칼로써 자르다"],
+    ["말___ 천 냥 빚을 갚는다.","로써","로서","정답: 로써 (수단·방법을 나타냄)\n오답: 로서 (자격·신분을 나타냄)\n구분: 도구·수단=로써, 자격·신분=로서\n예) 말로써 / 학생으로서"],
+    ["의장___ 회의를 이끌었다.","으로서","으로써","정답: 으로서 (자격·신분을 나타냄)\n오답: 으로써 (수단·도구)\n구분: 어떤 직책·입장은 '∼로서'\n예) 의장으로서 / 대표로서"],
+    ["꾸준한 노력___ 목표를 이뤘다.","으로써","으로서","정답: 으로써 (수단·방법, '∼을 가지고')\n오답: 으로서 (자격·신분)\n구분: 이뤄낸 도구=로써\n예) 노력으로써 / 정성으로써"],
+    ["그는 내 친구___ 진심으로 충고했다.","로서","로써","정답: 로서 (자격·관계를 나타냄)\n오답: 로써 (수단·도구)\n구분: '∼의 입장에서'는 로서\n예) 친구로서 / 부모로서"],
+    ["날카로운 칼___ 사과를 잘랐다.","로써","로서","정답: 로써 (도구·수단을 나타냄)\n오답: 로서 (자격·신분)\n구분: 도구=로써\n예) 칼로써 자르다 / 펜으로써 쓰다"],
+    ["반 대표___ 인사말을 했다.","로서","로써","정답: 로서 (자격·신분을 나타냄)\n오답: 로써 (수단·도구)\n구분: 직책·자격은 로서\n예) 대표로서 / 회장으로서"],
+    ["정성___ 손님을 대접했다.","으로써","으로서","정답: 으로써 (수단·태도, '∼을 가지고')\n오답: 으로서 (자격·신분)\n구분: 무엇을 가지고=로써\n예) 정성으로써 / 노력으로써"],
+    ["부모___ 자식을 사랑한다.","로서","로써","정답: 로서 (자격·관계 — 부모라는 입장)\n오답: 로써 (수단·도구)\n구분: 관계·신분=로서\n예) 부모로서 / 자식으로서"],
+    ["펜___ 글을 쓴다.","으로써","으로서","정답: 으로써 (도구·수단을 나타냄)\n오답: 으로서 (자격·신분)\n구분: 도구는 로써\n예) 펜으로써 쓰다 / 붓으로써 그리다"],
+    ["___ 오늘따라 일이 잘 풀린다.","왠지","웬지","정답: 왠지 ('왜인지'의 줄임, 이유 모르게)\n오답: 웬지 (사전에 없는 잘못된 표기)\n외우기: '왠지'만 '왠'을 씀, 그 외엔 다 '웬'\n예) 왠지 잘 풀린다 / 왠지 좋다"],
+    ["___ 해라, 너무 심하잖아.","웬만큼","왠만큼","정답: 웬만큼 ('어느 정도, 적당히')\n오답: 왠만큼 (사전에 없는 잘못된 표기)\n외우기: '웬만-'은 모두 '웬' (웬만하면, 웬만큼)\n예) 웬만큼 해라 / 웬만큼 하고 멈춰라"],
+    ["교사___ 학생을 지도한다.","로서","로써","정답: 로서 (직업·자격을 나타냄)\n오답: 로써 (수단·도구)\n구분: 직업·자격=로서\n예) 교사로서 / 의사로서"]
+  ],dt:[
+    "왠지 기분이 좋다.",
+    "웬일이야!",
+    "학생으로서 본분을 다하자.",
+    "말로써 천 냥 빚을 갚는다.",
+    "이게 웬 떡이야?",
+    "노력으로써 성공했다.",
+    "의장으로서 회의를 진행했다.",
+    "웬만하면 참아라.",
+    "친구로서 충고한다.",
+    "정성으로써 손님을 대접했다."
+  ]},
+  {id:5,name:"낫·낳·났 / 채·체 / 부치·붙이",sp:[
+    ["감기가 깨끗이 ___.","나았다","낳았다","정답: 나았다 ('낫다'의 과거, 병이 회복됨)\n오답: 낳았다 ('낳다' = 아기를 출산하다)\n구분: 회복=낫다, 출산=낳다\n예) 감기가 나았다 / 동생을 낳았다"],
+    ["어머니가 예쁜 동생을 ___.","낳았다","나았다","정답: 낳았다 ('낳다'의 과거, 새 생명을 세상에 내놓음)\n오답: 나았다 (병이 회복됨)\n구분: 출산=낳다, 회복=낫다\n예) 동생을 낳았다 / 병이 나았다"],
+    ["갑자기 큰 사고가 ___.","났다","낫다","정답: 났다 ('나다'의 과거, 어떤 일이 일어남)\n오답: 낫다 (더 좋다 / 병이 회복되다)\n구분: 발생=나다, 비교·회복=낫다\n예) 사고가 났다 / 이것이 낫다"],
+    ["이 신발이 저것보다 훨씬 ___.","낫다","낳다","정답: 낫다 (둘을 비교해 더 좋음)\n오답: 낳다 (아기를 출산하다)\n구분: 비교=낫다, 출산=낳다\n예) 이게 낫다 / 동생을 낳다"],
+    ["그 말을 듣고 화가 머리끝까지 ___.","났다","낫다","정답: 났다 (감정·현상이 일어남, '나다'의 과거)\n오답: 낫다 (더 좋다)\n구분: 일어남=나다, 비교·회복=낫다\n예) 화가 났다 / 짜증이 났다"],
+    ["우리집 닭이 알을 다섯 개나 ___.","낳았다","나았다","정답: 낳았다 ('낳다'의 과거, 동물이 알·새끼를 냄)\n오답: 나았다 (병이 회복됨)\n구분: 출산·산란=낳다, 회복=낫다\n예) 알을 낳다 / 감기가 낫다"],
+    ["신발을 신은 ___ 거실로 들어왔다.","채","체","정답: 채 (이미 그 상태 그대로)\n오답: 체 (어떤 척하는 것, 거짓 행동)\n구분: 상태 유지=채, 거짓 행동=체\n예) 신은 채 / 모르는 체"],
+    ["다 알면서 모르는 ___하지 마라.","체","채","정답: 체 (어떤 척하다, '∼하는 척')\n오답: 채 (상태 그대로 유지)\n구분: 척하다=체, 상태 그대로=채\n예) 모르는 체 / 아는 체"],
+    ["눈을 감은 ___ 음악을 들었다.","채","체","정답: 채 (감은 그 상태로 그대로)\n오답: 체 (척하다)\n구분: 상태 유지=채, 거짓 행동=체\n예) 눈을 감은 채 / 모르는 체"],
+    ["친구를 보고도 못 본 ___ 지나갔다.","체","채","정답: 체 ('못 본 척'하는 거짓 행동)\n오답: 채 (상태 그대로)\n구분: ∼하는 척=체, 상태 그대로=채\n예) 못 본 체 / 신은 채"],
+    ["시골 할머니께 편지를 ___.","부쳤다","붙였다","정답: 부쳤다 (멀리 보냄, 우편으로 전함)\n오답: 붙였다 (어디에 들러붙게 함)\n구분: 보내기=부치다, 들러붙음=붙이다\n예) 편지를 부치다 / 우표를 붙이다"],
+    ["봉투에 우표를 꼭 ___.","붙였다","부쳤다","정답: 붙였다 (어디에 떨어지지 않게 들러붙게 함)\n오답: 부쳤다 (멀리 보냄)\n구분: 들러붙음=붙이다, 보내기=부치다\n예) 우표를 붙이다 / 편지를 부치다"],
+    ["벽에 멋진 포스터를 ___.","붙였다","부쳤다","정답: 붙였다 (벽·면에 들러붙게 함)\n오답: 부쳤다 (멀리 보냄, 우편)\n구분: 들러붙음=붙이다, 보내기=부치다\n예) 포스터를 붙이다 / 소포를 부치다"],
+    ["우체국에서 소포를 ___.","부쳤다","붙였다","정답: 부쳤다 (우편·물건을 보냄)\n오답: 붙였다 (들러붙게 함)\n구분: 우편=부치다, 들러붙음=붙이다\n예) 소포를 부치다 / 스티커를 붙이다"],
+    ["어머니가 빈대떡을 노릇하게 ___.","부쳤다","붙였다","정답: 부쳤다 (전·부침개를 기름에 익혀 만듦)\n오답: 붙였다 (들러붙게 함)\n구분: 전 만들기=부치다, 들러붙음=붙이다\n예) 전을 부치다 / 메모지를 붙이다"],
+    ["책상에 메모지를 ___.","붙였다","부쳤다","정답: 붙였다 (떨어지지 않게 들러붙게 함)\n오답: 부쳤다 (멀리 보냄)\n구분: 들러붙음=붙이다, 보내기=부치다\n예) 메모지를 붙이다 / 우편을 부치다"],
+    ["오늘 아침에 갑자기 코피가 ___.","났다","낫다","정답: 났다 (몸에서 무엇이 생겨남, '나다'의 과거)\n오답: 낫다 (병이 회복되다 / 더 좋다)\n구분: 발생=나다, 회복·비교=낫다\n예) 코피가 났다 / 병이 낫다"],
+    ["그 일은 그냥 비밀에 ___.","부쳤다","붙였다","정답: 부쳤다 (어떤 문제를 따로 다루지 않음, 관용 표현)\n오답: 붙였다 (들러붙게 함)\n구분: '비밀에 부치다'는 굳은 표현\n예) 비밀에 부치다 / 안건을 회의에 부치다"],
+    ["그는 의자에서 잠든 ___ 코를 골았다.","채","체","정답: 채 (잠든 그 상태 그대로)\n오답: 체 (척하다)\n구분: 상태 유지=채, 거짓 행동=체\n예) 잠든 채 / 자는 체"],
+    ["아무것도 모르는 ___ 시치미를 뗐다.","체","채","정답: 체 (모르는 척하는 거짓 행동)\n오답: 채 (상태 그대로)\n구분: 척하다=체, 상태 그대로=채\n예) 모르는 체 / 자는 체"]
+  ],dt:[
+    "감기가 다 나았다.",
+    "어머니가 동생을 낳았다.",
+    "큰 사고가 났다.",
+    "이것이 더 낫다.",
+    "신발을 신은 채 들어왔다.",
+    "아는 체하지 마라.",
+    "편지를 부쳤다.",
+    "우표를 붙였다.",
+    "전을 부치다.",
+    "비밀에 부치다."
+  ]},
+  {id:6,name:"띄어쓰기 기초",sp:[
+    ["올바른 띄어쓰기는?","학교에 갔다","학교 에 갔다","정답: 학교에 갔다 (조사 '에'는 앞말에 붙여 씀)\n오답: 학교 에 갔다 (조사를 띄어 쓰면 틀림)\n규칙: 조사(에, 은, 는, 이, 가, 을, 를)는 앞말에 붙임\n예) 학교에, 집에서, 책을, 친구가"],
+    ["사과 ___ 샀다. (3개)","세 개","세개","정답: 세 개 (수와 단위명사는 띄어 씀)\n오답: 세개 (붙여 쓰면 한 단어처럼 보임)\n규칙: 수 + 단위(개, 명, 마리, 권 등)는 띄어 씀\n예) 세 개, 한 명, 두 마리, 책 한 권"],
+    ["나도 ___ 있다. (가능하다)","할 수","할수","정답: 할 수 (의존 명사 '수'는 앞말과 띄어 씀)\n오답: 할수 (한 단어처럼 붙이면 틀림)\n규칙: '수, 것, 줄, 바' 같은 의존 명사는 앞말과 띄어 씀\n예) 할 수 있다 / 갈 수 없다"],
+    ["___ 많다.","먹을 것이","먹을것이","정답: 먹을 것이 (의존 명사 '것'은 띄어 씀)\n오답: 먹을것이 (붙여 쓰면 틀림)\n규칙: '것'은 앞말과 띄어 쓰는 의존 명사\n예) 먹을 것이 / 할 것이 / 본 것 같다"],
+    ["그 친구를 ___ 한 달 됐다.","본 지","본지","정답: 본 지 ('지'는 시간을 나타내는 의존 명사)\n오답: 본지 (붙여 쓰면 틀림)\n구분: 시간 경과 의미의 '지'는 띄어 씀 / '먹는지'(추측) 의 '-는지'는 어미라 붙임\n예) 본 지 한 달 / 떠난 지 오래"],
+    ["올바른 띄어쓰기는?","나는 학생이다","나는 학생 이다","정답: 나는 학생이다 ('이다'는 서술격 조사, 앞말에 붙임)\n오답: 학생 이다 (조사를 띄어 쓰면 틀림)\n규칙: '이다'는 조사처럼 앞 명사에 붙여 씀\n예) 학생이다 / 친구이다 / 사람이다"],
+    ["___ 같다.","모르는 것","모르는것","정답: 모르는 것 ('것'은 의존 명사, 띄어 씀)\n오답: 모르는것 (붙여 쓰면 틀림)\n규칙: '것' 앞은 항상 띄어 씀\n예) 모르는 것 / 아는 것 / 좋은 것"],
+    ["___ 했다. (최선)","할 만큼","할만큼","정답: 할 만큼 ('만큼'은 의존 명사, 띄어 씀)\n오답: 할만큼 (붙여 쓰면 틀림)\n구분: 동사 뒤 '만큼'(의존 명사)은 띄어 씀 / 명사 뒤 '나만큼'(조사)은 붙임\n예) 할 만큼 했다 / 나만큼 키가 크다"],
+    ["그가 거짓말할 ___ 없다.","리가","리 가","정답: 리가 ('리'는 의존 명사지만 조사 '가'는 붙임)\n오답: 리 가 (조사 '가'를 띄어 쓰면 틀림)\n규칙: '거짓말할 리가' = '거짓말할' + '리' + '가(조사)'\n예) 그럴 리가 없다 / 갈 리가 없다"],
+    ["올바른 띄어쓰기는?","친구가 왔다","친구 가 왔다","정답: 친구가 왔다 (조사 '가'는 앞말에 붙임)\n오답: 친구 가 왔다 (조사를 띄어 쓰면 틀림)\n규칙: 주격 조사 '이/가'는 명사에 붙여 씀\n예) 친구가 / 학생이 / 사람이"],
+    ["연필이 ___ 있다.","책상 위에","책상위에","정답: 책상 위에 ('위, 아래, 옆, 밖, 안'은 명사라 띄어 씀)\n오답: 책상위에 (붙여 쓰면 틀림)\n규칙: 위치 명사 '위/아래/밖/안'은 앞말과 띄어 씀\n예) 책상 위 / 의자 아래 / 문 밖"],
+    ["___ 알았다.","그럴 줄","그럴줄","정답: 그럴 줄 ('줄'은 의존 명사, 띄어 씀)\n오답: 그럴줄 (붙여 쓰면 틀림)\n규칙: '줄'은 앞말과 띄어 쓰는 의존 명사\n예) 그럴 줄 알았다 / 할 줄 안다"],
+    ["옷차림은 ___.","사람 나름이다","사람나름이다","정답: 사람 나름이다 ('나름'은 의존 명사, 띄어 씀)\n오답: 사람나름이다 (붙여 쓰면 틀림)\n규칙: '나름'은 앞말과 띄어 씀\n예) 사람 나름이다 / 생각 나름이다"],
+    ["강아지 ___ 있다.","한 마리","한마리","정답: 한 마리 (수 + 단위명사는 띄어 씀)\n오답: 한마리 (붙여 쓰면 틀림)\n규칙: 수와 단위명사 사이는 띄어 씀\n예) 한 마리 / 두 권 / 세 개"],
+    ["종이 ___ 주세요.","한 장","한장","정답: 한 장 (수 + 단위명사는 띄어 씀)\n오답: 한장 (붙여 쓰면 틀림)\n규칙: 수와 단위는 분리\n예) 한 장 / 두 장 / 세 장"],
+    ["옷장 안에 동생도 ___ 들어 있었다.","함께","함 께","정답: 함께 (한 단어, 붙여 씀)\n오답: 함 께 (사전에 등재된 한 단어를 나누면 틀림)\n규칙: 부사 '함께'는 한 단어\n예) 함께 가다 / 친구와 함께"],
+    ["___ 같다.","학생인 것","학생인것","정답: 학생인 것 ('것'은 의존 명사, 띄어 씀)\n오답: 학생인것 (붙여 쓰면 틀림)\n규칙: '것' 앞은 띄어 씀\n예) 학생인 것 같다 / 어른인 것 같다"],
+    ["나는 ___ 없다.","갈 데가","갈데가","정답: 갈 데가 ('데'는 의존 명사, 띄어 씀)\n오답: 갈데가 (붙여 쓰면 틀림)\n구분: '∼할 데(=곳)'의 '데'는 의존 명사 / '먹는데(=상황)'의 '-는데'는 어미라 붙임\n예) 갈 데가 없다 / 잘 데가 없다"],
+    ["오늘 ___ 있다.","할 일이","할일이","정답: 할 일이 ('일'은 보통 명사, 앞말과 띄어 씀)\n오답: 할일이 (붙여 쓰면 틀림)\n규칙: '∼할' + 명사는 띄어 씀\n예) 할 일 / 할 말 / 할 공부"],
+    ["___ 노력했다.","최선을 다해","최선을다해","정답: 최선을 다해 (목적어 + 서술어는 띄어 씀)\n오답: 최선을다해 (붙여 쓰면 틀림)\n규칙: 단어와 단어 사이는 띄어 씀\n예) 최선을 다해 / 책을 읽다"]
+  ],dt:[
+    "학교에 간다.",
+    "책 한 권.",
+    "할 수 있다.",
+    "먹을 것이 많다.",
+    "본 지 오래됐다.",
+    "사과 세 개를 샀다.",
+    "모르는 것 같다.",
+    "할 만큼 했다.",
+    "그럴 리가 없다.",
+    "갈 데가 없다."
+  ]},
+  {id:7,name:"띄어쓰기 응용",sp:[
+    ["___ 도와주세요. (시도 부탁)","한번만","한 번만","정답: 한번만 ('한번' = 시도·기회의 뜻으로 한 단어)\n오답: 한 번만 (정확한 1회를 셀 때)\n구분: '한번 해 볼까?'(시도)=붙임 / '한 번만 더'(횟수)=띄움\n예) 한번 시도해 보다 / 한 번만 쳤다"],
+    ["종을 ___ 더 쳤다. (1회 추가)","한 번","한번","정답: 한 번 (정확히 한 번, 횟수를 셀 때)\n오답: 한번 (시도·기회를 말할 때)\n구분: 1회를 또렷이 셈=띄움 / 한번 해보다=붙임\n예) 한 번 쳤다 / 한번 해 보다"],
+    ["그는 약속을 지키지 ___.","않았다","안았다","정답: 않았다 ('-지 않다'의 형태, '아니하-'에서 옴)\n오답: 안았다 ('안다(품다)'의 과거, 뜻이 전혀 다름)\n구분: '∼지 않-'은 부정, '안다'는 품에 끌어안다\n예) 지키지 않았다 / 아기를 안았다"],
+    ["다리가 아파서 ___.","못 걸었다","못걸었다","정답: 못 걸었다 (부사 '못' + 동사, 띄어 씀)\n오답: 못걸었다 (부사는 띄어 씀)\n규칙: 부정 부사 '못'은 동사 앞에서 띄어 씀\n예) 못 걸었다 / 못 했다 (※ '못하다'(실력 부족)는 한 단어)"],
+    ["그는 수영을 정말 ___. (실력 부족)","못한다","못 한다","정답: 못한다 (실력·능력이 부족함, 한 단어)\n오답: 못 한다 (어떤 사정으로 하지 못함)\n구분: 실력 부족=붙임(못한다) / 사정상 불가=띄움(못 한다)\n예) 수영을 못한다(실력) / 바빠서 못 한다(사정)"],
+    ["비가 ___.","올 것 같다","올것 같다","정답: 올 것 같다 ('것'은 의존 명사, 앞말과 띄어 씀)\n오답: 올것 같다 (붙여 쓰면 틀림)\n규칙: '∼할 것 같다'에서 '것'은 띄어 씀\n예) 올 것 같다 / 갈 것 같다 / 좋을 것 같다"],
+    ["그가 ___ 오래됐다.","떠난 지","떠난지","정답: 떠난 지 ('지'는 시간 경과를 나타내는 의존 명사)\n오답: 떠난지 (붙여 쓰면 틀림)\n구분: 시간 경과의 '지'=띄움 / 추측의 '-는지'=붙임\n예) 떠난 지 한 달 / 갔는지 모른다"],
+    ["나도 ___.","할 수 있다","할수있다","정답: 할 수 있다 ('수'는 의존 명사, 단어와 단어 사이 띄어 씀)\n오답: 할수있다 (모두 붙이면 틀림)\n규칙: '∼할 수 있다/없다'는 세 단어로 띄어 씀\n예) 할 수 있다 / 갈 수 없다"],
+    ["이 일을 할 사람은 ___. (오직)","너뿐이다","너 뿐이다","정답: 너뿐이다 ('뿐'이 조사일 때는 붙임)\n오답: 너 뿐이다 (체언 뒤 '뿐'은 조사)\n구분: 명사 뒤 '뿐'=조사(붙임) / 동사 뒤 '뿐'=의존명사(띄움)\n예) 너뿐이다 / 말할 뿐이다"],
+    ["그는 ___ 행동은 안 한다.","말할 뿐","말할뿐","정답: 말할 뿐 (동사 뒤 '뿐'은 의존 명사, 띄어 씀)\n오답: 말할뿐 (붙여 쓰면 틀림)\n구분: 동사 뒤 '뿐'=띄움 / 명사 뒤 '뿐'=붙임\n예) 말할 뿐이다 / 너뿐이다"],
+    ["혼자서도 그 가방을 ___ 있다.","들 수","들수","정답: 들 수 ('수'는 의존 명사, 띄어 씀)\n오답: 들수 (한 단어처럼 붙이면 틀림)\n규칙: '∼할 수 있다/없다'의 '수'는 띄어 씀\n예) 들 수 있다 / 갈 수 있다"],
+    ["동생도 학교에 ___.","갔다","같다","정답: 갔다 ('가다'의 과거형, 이동)\n오답: 같다 (서로 닮음·동일)\n구분: 움직임=가-, 비교=같-\n※ '도'는 조사로 앞말에 붙임\n예) 학교에 갔다 / 키가 같다"],
+    ["올바른 표기는?","이것은 책이다","이 것은 책이다","정답: 이것은 책이다 ('이것/그것/저것'은 한 단어)\n오답: 이 것은 (사전 등재된 한 단어를 나누면 틀림)\n규칙: '이것·그것·저것·무엇'은 한 단어로 붙임\n예) 이것 / 그것 / 저것"],
+    ["올바른 표기는?","저것이 좋다","저 것이 좋다","정답: 저것이 좋다 ('저것'은 한 단어)\n오답: 저 것이 (사전 등재 한 단어)\n규칙: '저것·이것·그것'은 붙여 씀\n예) 저것이 좋다 / 이것이 좋다"],
+    ["오늘은 빨리 ___.","들어가야지","들어 가야지","정답: 들어가야지 ('들어가다'는 한 단어, 합성동사)\n오답: 들어 가야지 (한 단어를 나누면 틀림)\n규칙: '들어가다·돌아오다' 같은 합성동사는 붙임\n예) 들어가야지 / 들어왔다"],
+    ["저녁때 집에 ___.","돌아왔다","돌아 왔다","정답: 돌아왔다 ('돌아오다'는 한 단어, 합성동사)\n오답: 돌아 왔다 (한 단어를 나누면 틀림)\n규칙: 합성동사 '돌아오다·돌아가다'는 붙임\n예) 돌아왔다 / 돌아갔다"],
+    ["나는 매일 ___.","공부한다","공부 한다","정답: 공부한다 ('명사+하다'는 한 단어로 붙임)\n오답: 공부 한다 (나누면 틀림)\n규칙: '공부하다·운동하다·청소하다'는 한 단어\n예) 공부한다 / 운동한다 / 청소한다"],
+    ["부모님을 ___.","사랑한다","사랑 한다","정답: 사랑한다 ('명사+하다'는 한 단어)\n오답: 사랑 한다 (나누면 틀림)\n규칙: '사랑하다·존경하다·생각하다'는 한 단어\n예) 사랑한다 / 존경한다 / 생각한다"],
+    ["바람이 ___ 분다.","매우 빠르게","매우빠르게","정답: 매우 빠르게 (부사와 부사는 띄어 씀)\n오답: 매우빠르게 (붙여 쓰면 틀림)\n규칙: 단어와 단어 사이는 띄어 씀\n예) 매우 빠르게 / 아주 천천히"],
+    ["나는 그 문제를 ___.","잘 모르겠다","잘모르겠다","정답: 잘 모르겠다 (부사 '잘'과 동사 '모르겠다'는 띄어 씀)\n오답: 잘모르겠다 (붙여 쓰면 틀림)\n규칙: 단어 사이는 띄어 씀\n예) 잘 모르겠다 / 잘 했다"]
+  ],dt:[
+    "한번만 도와주세요.",
+    "종을 한 번 더 쳤다.",
+    "약속을 지키지 않았다.",
+    "다리가 아파서 못 걸었다.",
+    "수영을 정말 못한다.",
+    "비가 올 것 같다.",
+    "떠난 지 한 달이 됐다.",
+    "이 일은 너뿐이다.",
+    "들어가야지.",
+    "공부한다."
+  ]},
+  {id:8,name:"종합 마스터",sp:[
+    ["___가 옆으로 걷는다.","게","개","정답: 게 (바다 갑각류, 옆으로 걷는 동물)\n오답: 개 (멍멍 짖는 강아지)\n구분: 옆으로 걷는 건 '게', 꼬리 흔드는 건 '개'\n예) 꽃게가 걷다 / 개가 짖다"],
+    ["잃어버린 책을 다시 ___.","찾았다","찼다","정답: 찾았다 (잃은 것을 다시 발견함)\n오답: 찼다 (가득 차다 / 발로 차다)\n구분: 발견=찾-, 가득 참·차기=차-\n예) 책을 찾다 / 공을 차다"],
+    ["이러면 ___ 돼.","안","않","정답: 안 (부정 부사, 동사 앞에 띄어 씀)\n오답: 않 ('-지 않-' 자리에만 씀)\n외우기: '안 돼'는 항상 띄어 쓰는 두 단어\n예) 안 돼 / 하지 않는다"],
+    ["그 약속은 잊지 ___.","않을게","안을게","정답: 않을게 ('-지 않-' 형태, 한 덩어리)\n오답: 안을게 ('안다(품다)'와 헷갈림)\n구분: 부정은 '∼지 않-', 품에 끌어안는 건 '안-'\n예) 잊지 않을게 / 아기를 안다"],
+    ["오늘따라 ___ 슬프다.","왠지","웬지","정답: 왠지 ('왜인지'의 줄임)\n오답: 웬지 (사전에 없는 잘못된 표기)\n외우기: '왠지'만 '왠', 나머지는 모두 '웬'\n예) 왠지 슬프다 / 웬일이야"],
+    ["교사___ 학생을 사랑한다.","로서","로써","정답: 로서 (자격·신분을 나타냄)\n오답: 로써 (수단·도구)\n구분: 자격·신분=로서, 도구·수단=로써\n예) 교사로서 / 펜으로써"],
+    ["갑자기 화가 잔뜩 ___.","났다","낫다","정답: 났다 (감정이 일어남, '나다'의 과거)\n오답: 낫다 (병이 회복됨 / 더 좋음)\n구분: 발생=나다, 비교·회복=낫다\n예) 화가 났다 / 감기가 낫다"],
+    ["피곤해서 잠든 ___ 일어나지 못했다.","채","체","정답: 채 (이미 그 상태로)\n오답: 체 (척하다)\n구분: 상태 유지=채, 거짓 행동=체\n예) 잠든 채 / 모르는 체"],
+    ["할머니께 편지를 ___.","부쳤다","붙였다","정답: 부쳤다 (멀리 보냄, 우편)\n오답: 붙였다 (들러붙게 함)\n구분: 보내기=부치다, 들러붙음=붙이다\n예) 편지를 부치다 / 우표를 붙이다"],
+    ["나도 ___.","할 수 있다","할수있다","정답: 할 수 있다 (세 단어, 띄어 씀)\n오답: 할수있다 (모두 붙이면 틀림)\n규칙: '∼할 수 있다/없다'는 띄어 씀\n예) 할 수 있다 / 갈 수 없다"],
+    ["신발끈을 단단히 ___.","맸다","멨다","정답: 맸다 ('매다'의 과거, 끈을 묶음)\n오답: 멨다 ('메다'의 과거, 어깨에 걸침)\n외우기: '끈은 매다, 가방은 메다'\n예) 끈을 맸다 / 가방을 멨다"],
+    ["바람에 문이 저절로 ___.","닫혔다","닿혔다","정답: 닫혔다 ('닫다'의 피동, 막혔음)\n오답: 닿혔다 (사전에 없는 잘못된 표기)\n구분: 막힘=닫히다, 가닿음=닿다\n예) 문이 닫히다 / 손이 닿다"],
+    ["꿈을 이뤄 의사가 ___.","됐다","됬다","정답: 됐다 ('되었다'의 줄임말)\n오답: 됬다 (사전에 없는 잘못된 표기)\n외우기: '되어→돼', '되었다→됐다'\n예) 의사가 됐다 / 시간이 됐다"],
+    ["___ 네가 여기에 오다니!","웬일이야","왠일이야","정답: 웬일이야 ('어찌 된 일'의 뜻)\n오답: 왠일이야 (사전에 없는 잘못된 표기)\n외우기: '웬'은 '어찌 된, 어떠한' / '왠'은 '왠지'에만\n예) 웬일이야 / 웬 떡이야"],
+    ["말___ 사람을 움직인다.","로써","로서","정답: 로써 (수단·도구를 나타냄)\n오답: 로서 (자격·신분)\n구분: 수단=로써, 자격=로서\n예) 말로써 / 친구로서"],
+    ["이 신발이 저 신발보다 ___.","낫다","낳다","정답: 낫다 (둘을 비교해 더 좋음)\n오답: 낳다 (아기를 출산함)\n구분: 비교=낫다, 출산=낳다\n예) 이게 낫다 / 동생을 낳다"],
+    ["다 알면서도 모르는 ___ 시치미를 뗐다.","체","채","정답: 체 (모르는 척하는 거짓 행동)\n오답: 채 (상태 그대로 유지)\n구분: 척하다=체, 상태 그대로=채\n예) 모르는 체 / 신은 채"],
+    ["봉투에 우표를 ___.","붙였다","부쳤다","정답: 붙였다 (들러붙게 함)\n오답: 부쳤다 (멀리 보냄)\n구분: 들러붙음=붙이다, 보내기=부치다\n예) 우표를 붙이다 / 편지를 부치다"],
+    ["내일은 학교에 ___.","갈 거야","갈거야","정답: 갈 거야 ('거'는 '것'의 구어, 의존 명사라 띄어 씀)\n오답: 갈거야 (붙여 쓰면 틀림)\n규칙: '∼할 거야 / ∼할 것이다'에서 띄어 씀\n예) 갈 거야 / 할 거야"],
+    ["어머니가 ___를 끓이셨다.","찌개","찌게","정답: 찌개 (국물 음식, 표준어)\n오답: 찌게 (사전에 없는 잘못된 표기)\n외우기: '찌개'가 표준, 메뉴판도 자주 틀림\n예) 김치찌개 / 된장찌개"]
+  ],dt:[
+    "게가 옆으로 걷는다.",
+    "신발끈을 단단히 맸다.",
+    "이제 가도 돼.",
+    "약속을 잊지 않을게.",
+    "왠지 슬프다.",
+    "학생으로서 본분을 다한다.",
+    "감기가 다 나았다.",
+    "잠든 채 코를 골았다.",
+    "편지를 부쳤다.",
+    "나도 할 수 있다."
+  ]}
+];
+
+/* ========== 상태 ========== */
+const state = {
+  name: localStorage.getItem('rbd_name') || '',
+  mode: localStorage.getItem('rbd_mode') || 'practice', // practice / challenge
+  stage: null,
+  phase: 'home', // home / intro / spelling / dictation / result / gameover
+  qIdx: 0,
+  correct: 0,
+  total: 0,
+  hearts: CONFIG.HEARTS,
+  wrong: [], // {q,my,ans,explain,type}
+  selected: null,
+  showAnswer: false,
+  retried: false // 연습 모드 받아쓰기 재도전 여부
+};
+
+/* ========== 효과음 (Web Audio API) ========== */
+let audioCtx = null;
+function getAC(){
+  if(!audioCtx){
+    try{ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }
+    catch(e){ return null; }
+  }
+  if(audioCtx.state==='suspended') audioCtx.resume();
+  return audioCtx;
+}
+function beep(freq, dur, type='sine', vol=0.15, delay=0){
+  const ac = getAC(); if(!ac) return;
+  const t = ac.currentTime + delay;
+  const osc = ac.createOscillator();
+  const g = ac.createGain();
+  osc.type = type; osc.frequency.setValueAtTime(freq, t);
+  g.gain.setValueAtTime(0, t);
+  g.gain.linearRampToValueAtTime(vol, t+0.01);
+  g.gain.exponentialRampToValueAtTime(0.001, t+dur);
+  osc.connect(g); g.connect(ac.destination);
+  osc.start(t); osc.stop(t+dur+0.02);
+}
+const sfx = {
+  correct(){ beep(660,0.12,'sine',0.18); beep(990,0.18,'sine',0.18,0.1); },
+  wrong(){ beep(220,0.18,'square',0.12); beep(160,0.22,'square',0.12,0.12); },
+  tap(){ beep(800,0.05,'sine',0.08); },
+  win(){ [523,659,784,1047].forEach((f,i)=>beep(f,0.2,'triangle',0.16,i*0.12)); },
+  lose(){ beep(330,0.25,'triangle',0.14); beep(220,0.35,'triangle',0.14,0.2); }
+};
+
+/* ========== 유틸 ========== */
+function $(s){return document.querySelector(s)}
+function h(tag, attrs={}, ...children){
+  const el = document.createElement(tag);
+  for(const [k,v] of Object.entries(attrs)){
+    if(k==='class') el.className=v;
+    else if(k.startsWith('on')) el.addEventListener(k.slice(2).toLowerCase(), v);
+    else if(k==='html') el.innerHTML=v;
+    else el.setAttribute(k,v);
+  }
+  for(const c of children){
+    if(c==null) continue;
+    el.appendChild(typeof c==='string' ? document.createTextNode(c) : c);
+  }
+  return el;
+}
+function toast(msg){
+  const t = $('#toast'); t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2200);
+}
+function normalize(s){ return (s||'').replace(/\s+/g,' ').trim(); }
+
+/* TTS - 갤럭시 안드로이드 호환 */
+function speak(text){
+  if(!('speechSynthesis' in window)) return;
+  speechSynthesis.cancel();
+  function trySpeak(tries){
+    const voices = speechSynthesis.getVoices();
+    if(voices.length === 0 && tries < 20){
+      setTimeout(function(){ trySpeak(tries+1); }, 100);
+      return;
+    }
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'ko-KR'; u.rate = 0.85;
+    const ko = voices.find(function(v){ return v.lang==='ko-KR'; })
+             || voices.find(function(v){ return v.lang.startsWith('ko'); });
+    if(ko) u.voice = ko;
+    speechSynthesis.speak(u);
+  }
+  setTimeout(function(){ trySpeak(0); }, 100);
+}
+
+/* ========== 레벨 칭호 ========== */
+function levelInfo(rate){
+  if(rate>=0.95) return {title:'류봉두의 수제자', emoji:'👑', color:'#ce82ff'};
+  if(rate>=0.85) return {title:'류봉두의 오른팔', emoji:'💪', color:'#1cb0f6'};
+  if(rate>=0.70) return {title:'류봉두의 우등생', emoji:'🎓', color:'#58cc02'};
+  if(rate>=0.55) return {title:'류봉두의 새싹', emoji:'🌱', color:'#ffc800'};
+  if(rate>=0.40) return {title:'류봉두의 떡잎', emoji:'🌿', color:'#ff9600'};
+  return {title:'류봉두의 걱정거리', emoji:'😢', color:'#ff4b4b'};
+}
+
+/* ========== 화면: 홈 ========== */
+function renderHome(){
+  const app = $('#app'); app.innerHTML='';
+  const hasName = state.name.trim().length>=1;
+
+  const wrap = h('div',{class:'home'});
+
+  wrap.appendChild(h('div',{class:'home-header'},
+    h('div',{class:'mascot'},'🦉'),
+    h('h1',{html:'류봉두와 함께하는<br><span>기초 국어 튼튼 레벨업!</span>'}),
+    h('div',{class:'sub'},'하루 15분, 8단계로 완성하는 기초 국어')
+  ));
+
+  // 이름 입력
+  const nameBox = h('div',{class:'name-box'},
+    h('label',{},'학생 이름 (시트에 기록됩니다)'),
+    h('input',{type:'text',placeholder:'예: 김민지',value:state.name,maxlength:'12',
+      oninput:e=>{
+        state.name=e.target.value;
+        localStorage.setItem('rbd_name',state.name);
+        $('#nameStatus').textContent = state.name.trim() ? '✓ 입력 완료 — 단계를 선택하세요' : '이름을 입력해야 단계를 시작할 수 있어요';
+        $('#nameStatus').className = 'name-status'+(state.name.trim()?' ok':'');
+        document.querySelectorAll('.stage-card').forEach(c=>{
+          c.classList.toggle('locked', !state.name.trim());
+          c.classList.toggle('active', !!state.name.trim());
+        });
+      }}),
+    h('div',{class:'name-status'+(hasName?' ok':''),id:'nameStatus'},
+      hasName ? '✓ 입력 완료 — 단계를 선택하세요' : '이름을 입력해야 단계를 시작할 수 있어요')
+  );
+  wrap.appendChild(nameBox);
+
+  // 모드 선택
+  const modeBox = h('div',{class:'mode-section'},
+    h('div',{class:'mode-title'},'모드를 선택하세요'),
+    h('div',{class:'mode-grid'},
+      h('div',{class:'mode-card'+(state.mode==='practice'?' active':''),id:'modePractice',
+        onclick:()=>{state.mode='practice';localStorage.setItem('rbd_mode','practice');
+          document.getElementById('modePractice').classList.add('active');
+          document.getElementById('modeChallenge').classList.remove('active');sfx.tap();}},
+        h('div',{class:'mc-name'},'연습 모드'),
+        h('div',{class:'mc-desc'},'하트 없음 · 끝까지 풀기'+'\n'+'받아쓰기 한 번 더 듣기 가능')
+      ),
+      h('div',{class:'mode-card'+(state.mode==='challenge'?' active':''),id:'modeChallenge',
+        onclick:()=>{state.mode='challenge';localStorage.setItem('rbd_mode','challenge');
+          document.getElementById('modeChallenge').classList.add('active');
+          document.getElementById('modePractice').classList.remove('active');sfx.tap();}},
+        h('div',{class:'mc-name'},'챌린지 모드'),
+        h('div',{class:'mc-desc'},'하트 5개 · 다 떨어지면 종료')
+      )
+    )
+  );
+  wrap.appendChild(modeBox);
+
+  wrap.appendChild(h('div',{class:'stages-title'},'단계를 선택하세요'));
+
+  const grid = h('div',{class:'stages'});
+  STAGES.forEach(s=>{
+    const card = h('div',{class:'stage-card'+(hasName?' active':' locked'),
+      onclick:()=>{
+        if(!state.name.trim()){ toast('먼저 이름을 입력하세요'); return; }
+        sfx.tap(); startStage(s.id);
+      }},
+      h('div',{class:'stage-num'},'STAGE '+s.id),
+      h('div',{class:'stage-icon'},s.icon),
+      h('div',{class:'stage-name'},s.name)
+    );
+    grid.appendChild(card);
+  });
+  wrap.appendChild(grid);
+  app.appendChild(wrap);
+}
+
+/* ========== 화면: 인트로 ========== */
+function startStage(id){
+  state.stage = STAGES.find(s=>s.id===id);
+  state.phase='intro';
+  state.qIdx=0; state.correct=0; state.total=0;
+  state.hearts = (state.mode==='challenge') ? CONFIG.CHALLENGE_HEARTS : CONFIG.PRACTICE_HEARTS;
+  state.retried=false;
+  state.wrong=[]; state.selected=null; state.showAnswer=false;
+  renderIntro();
+}
+function renderIntro(){
+  const app=$('#app'); app.innerHTML='';
+  const s=state.stage;
+  const wrap=h('div',{class:'intro'},
+    h('div',{class:'intro-icon'},s.icon),
+    h('div',{},
+      h('h2',{},'STAGE '+s.id+'. '+s.name),
+      h('p',{},s.desc)
+    ),
+    h('div',{class:'intro-cards'},
+      h('div',{class:'intro-card'}, h('div',{class:'n'},'20'), h('div',{class:'l'},'맞춤법')),
+      h('div',{class:'intro-card'}, h('div',{class:'n'},'10'), h('div',{class:'l'},'받아쓰기'))
+    ),
+    h('p',{html:'<b>'+state.name+'</b> 학생, 준비됐나요?<br>틀려도 괜찮아요. 천천히 풀어 봅시다.'}),
+    h('button',{class:'btn btn-primary',style:'margin-top:8px',onclick:()=>{sfx.tap();state.phase='spelling';renderQ();}},'시작하기'),
+    h('button',{class:'btn btn-ghost',onclick:()=>{state.phase='home';renderHome();}},'홈으로')
+  );
+  app.appendChild(wrap);
+}
+
+/* ========== 진행 ========== */
+function totalQ(){ return state.stage.sp.length + state.stage.dt.length; }
+function curIdx(){ return state.phase==='spelling' ? state.qIdx : state.stage.sp.length + state.qIdx; }
+
+function renderQ(){
+  const app=$('#app'); app.innerHTML='';
+  const s=state.stage;
+
+  // 상단 (X, 진도바, 하트/모드배지)
+  const rightSide = (state.mode==='challenge')
+    ? h('div',{class:'hearts'},h('span',{},'❤'), h('em',{},'×'+state.hearts))
+    : h('div',{class:'practice-pill'},'연습 모드');
+  const top = h('div',{class:'play-top'},
+    h('button',{class:'close-btn',onclick:confirmExit},'✕'),
+    h('div',{class:'progress-bar'},
+      h('div',{class:'progress-fill',style:`width:${(curIdx()/totalQ())*100}%`})
+    ),
+    rightSide
+  );
+
+  const play = h('div',{class:'play'}, top);
+
+  if(state.phase==='spelling') renderSpelling(play);
+  else renderDictation(play);
+
+  app.appendChild(play);
+}
+
+function renderSpelling(root){
+  const s = state.stage;
+  const q = s.sp[state.qIdx];
+  const [text, optA, optB, explain] = q;
+  // 정답은 항상 optA, 오답은 optB. 보여줄 때는 무작위로 섞음
+  if(!state.shuffled){
+    state.shuffled = Math.random()<0.5;
+  }
+  const opts = state.shuffled ? [optB, optA] : [optA, optB];
+
+  const sentence = text.replace('___', '<span class="blank">_____</span>');
+
+  root.appendChild(h('div',{class:'section-label'},`맞춤법 ${state.qIdx+1} / ${s.sp.length}`));
+  root.appendChild(h('div',{class:'q-title'},'빈칸에 알맞은 말을 고르세요'));
+  root.appendChild(h('div',{class:'q-sentence',html:sentence}));
+
+  const opBox = h('div',{class:'options'});
+  opts.forEach((o,i)=>{
+    const isCorrect = (o===optA);
+    const btn = h('button',{class:'opt',onclick:()=>{
+      if(state.showAnswer) return;
+      sfx.tap();
+      document.querySelectorAll('.opt').forEach(x=>x.classList.remove('selected'));
+      btn.classList.add('selected');
+      state.selected = {choice:o, correct:isCorrect};
+      $('#checkBtn').disabled = false;
+    }}, o);
+    opBox.appendChild(btn);
+  });
+  root.appendChild(opBox);
+
+  const check = h('button',{id:'checkBtn',class:'btn btn-primary',style:'margin-top:16px',disabled:'true',
+    onclick:()=>checkSpelling(text, optA, optB, explain)},'확인');
+  root.appendChild(check);
+}
+
+function checkSpelling(text, ans, wrong, explain){
+  if(!state.selected) return;
+  const ok = state.selected.correct;
+  state.total++;
+  if(ok){ state.correct++; sfx.correct(); }
+  else {
+    if(state.mode==='challenge') state.hearts--;
+    sfx.wrong();
+    state.wrong.push({
+      type:'맞춤법',
+      q:text.replace('___','( ___ )'),
+      my:state.selected.choice,
+      ans:ans,
+      explain:explain
+    });
+  }
+  showFeedback(ok, ans, explain);
+}
+
+function renderDictation(root){
+  const s = state.stage;
+  const sent = s.dt[state.qIdx];
+
+  root.appendChild(h('div',{class:'section-label'},`받아쓰기 ${state.qIdx+1} / ${s.dt.length}`));
+  root.appendChild(h('div',{class:'q-title'},'들려주는 문장을 받아쓰세요'));
+
+  const dict = h('div',{class:'dict-area'});
+  const controls = h('div',{class:'dict-controls'},
+    h('button',{class:'dict-btn',onclick:()=>{sfx.tap();speak(sent);}},'🔊 들려주기'),
+    h('button',{class:'dict-btn alt',onclick:()=>{sfx.tap();speechSynthesis.cancel();setTimeout(function(){var voices=speechSynthesis.getVoices();var u=new SpeechSynthesisUtterance(sent);u.lang='ko-KR';u.rate=0.55;var ko=voices.find(function(v){return v.lang==='ko-KR';})||voices.find(function(v){return v.lang.startsWith('ko');});if(ko)u.voice=ko;speechSynthesis.speak(u);},100);}},'🐢 느리게')
+  );
+  dict.appendChild(controls);
+
+  const input = h('input',{type:'text',class:'dict-input',placeholder:'여기에 입력하세요',autocomplete:'off',
+    oninput:e=>{ $('#checkBtn').disabled = !e.target.value.trim(); }});
+  dict.appendChild(input);
+  dict.appendChild(h('div',{class:'dict-hint'},'들려주기 버튼을 누르고 들리는 대로 정확히 써 보세요'));
+  root.appendChild(dict);
+
+  const check = h('button',{id:'checkBtn',class:'btn btn-primary',style:'margin-top:16px',disabled:'true',
+    onclick:()=>checkDictation(input.value, sent)},'확인');
+  root.appendChild(check);
+
+  setTimeout(()=>{speak(sent); input.focus();}, 350);
+}
+
+function checkDictation(typed, ans){
+  const my = normalize(typed);
+  const correct = normalize(ans);
+  const ok = my===correct;
+
+  // 연습 모드: 첫 오답일 때 정답 비공개 + 한 번 더 듣기 기회 제공
+  if(!ok && state.mode==='practice' && !state.retried){
+    state.retried = true;
+    sfx.wrong();
+    showRetryFeedback(ans);
+    return;
+  }
+
+  state.total++;
+  if(ok){ state.correct++; sfx.correct(); }
+  else {
+    if(state.mode==='challenge') state.hearts--;
+    sfx.wrong();
+    state.wrong.push({
+      type:'받아쓰기',
+      q:'들려준 문장',
+      my: typed.trim() || '(빈칸)',
+      ans: ans,
+      explain:'정답: '+ans+'\n띄어쓰기와 받침까지 정확히 맞추는 것이 중요해요.\n천천히 발음을 끊어서 들어 보세요.\n예) 한 글자씩 또박또박 받아써 보기'
+    });
+  }
+  state.retried = false; // 다음 문항을 위해 초기화
+  showFeedback(ok, ans, ok?'완벽해요!':'정답: '+ans+'\n띄어쓰기와 받침까지 정확히 맞추어 보세요.');
+}
+
+function showRetryFeedback(ans){
+  state.showAnswer = false;
+  let fb = $('#fb');
+  if(!fb){
+    fb = h('div',{id:'fb',class:'feedback'});
+    document.body.appendChild(fb);
+  }
+  fb.className = 'feedback show wrong';
+  fb.innerHTML = '';
+  fb.appendChild(h('div',{class:'fb-head'},
+    h('div',{class:'fb-icon'}, '🎧'),
+    h('div',{class:'fb-title'}, '한 번 더 들어볼까요?')
+  ));
+  fb.appendChild(h('div',{class:'fb-detail',html:'정답을 보여드리지 않을게요.<br>천천히 다시 들어보고 받침과 띄어쓰기를 살펴보세요.'}));
+  fb.appendChild(h('button',{class:'fb-btn',onclick:()=>{
+    fb.classList.remove('show');
+    speak(ans);
+    const inp = document.querySelector('.dict-input');
+    if(inp){ inp.focus(); inp.select(); }
+  }},'다시 듣기'));
+}
+
+function showFeedback(ok, ans, explain){
+  state.showAnswer = true;
+  let fb = $('#fb');
+  if(!fb){
+    fb = h('div',{id:'fb',class:'feedback'});
+    document.body.appendChild(fb);
+  }
+  fb.className = 'feedback show '+(ok?'correct':'wrong');
+  fb.innerHTML = '';
+  fb.appendChild(h('div',{class:'fb-head'},
+    h('div',{class:'fb-icon'}, ok?'🎉':'😅'),
+    h('div',{class:'fb-title'}, ok?'정답입니다!':'아쉬워요')
+  ));
+  const explainHtml = String(explain||'').replace(/\n/g,'<br>');
+  fb.appendChild(h('div',{class:'fb-detail',html: ok ? '잘했어요. 다음 문제로 가요!' :
+    `정답: <strong>${ans}</strong><br>💡 ${explainHtml}`}));
+  fb.appendChild(h('button',{class:'fb-btn',onclick:nextQ},'계속하기'));
+
+  // 하트 0 처리
+  if(state.hearts<=0){
+    setTimeout(()=>{ fb.classList.remove('show'); gameOver(); }, 900);
+  }
+}
+
+function nextQ(){
+  const fb = $('#fb'); if(fb) fb.classList.remove('show');
+  state.showAnswer=false; state.selected=null; state.shuffled=null;
+  state.qIdx++;
+  if(state.phase==='spelling'){
+    if(state.qIdx>=state.stage.sp.length){
+      state.phase='dictation'; state.qIdx=0;
+    }
+  } else {
+    if(state.qIdx>=state.stage.dt.length){ return finishStage(); }
+  }
+  renderQ();
+}
+
+/* ========== 결과 ========== */
+function finishStage(){
+  const rate = state.total ? state.correct/state.total : 0;
+  rate>=0.7 ? sfx.win() : sfx.lose();
+  state.phase='result';
+  renderResult();
+}
+
+function renderResult(){
+  const app=$('#app'); app.innerHTML='';
+  const rate = state.total ? state.correct/state.total : 0;
+  const lv = levelInfo(rate);
+  const pct = Math.round(rate*100);
+
+  const wrap = h('div',{class:'result'});
+  const modeLabel = state.mode==='challenge' ? '챌린지' : '연습';
+  const modeClass = state.mode==='challenge' ? 'mode-badge challenge' : 'mode-badge';
+  wrap.appendChild(h('div',{class:'result-top'},
+    h('div',{class:'result-emoji'},lv.emoji),
+    h('div',{class:'result-title'},'STAGE '+state.stage.id+' 완료!'),
+    h('div',{},
+      h('span',{class:'result-level',style:`background:${lv.color};color:#fff;box-shadow:0 3px 0 rgba(0,0,0,.15)`}, lv.title),
+      h('span',{class:modeClass}, modeLabel)
+    )
+  ));
+
+  const heartCard = (state.mode==='challenge')
+    ? h('div',{class:'stat-card'}, h('div',{class:'stat-n'},state.hearts+'❤'), h('div',{class:'stat-l'},'남은 하트'))
+    : h('div',{class:'stat-card'}, h('div',{class:'stat-n'},'완료 ✓'), h('div',{class:'stat-l'},'연습 모드'));
+  wrap.appendChild(h('div',{class:'result-stats'},
+    h('div',{class:'stat-card'}, h('div',{class:'stat-n'},pct+'%'), h('div',{class:'stat-l'},'정답률')),
+    h('div',{class:'stat-card'}, h('div',{class:'stat-n'},state.correct+'/'+state.total), h('div',{class:'stat-l'},'맞은 문제')),
+    heartCard
+  ));
+
+  if(state.wrong.length){
+    const rev = h('div',{class:'review-section'},
+      h('h3',{},`복습이 필요한 문제 (${state.wrong.length}개)`));
+    const list = h('div',{class:'review-list'});
+    state.wrong.forEach(w=>{
+      const item = h('div',{class:'review-item'},
+        h('div',{class:'review-q'},`[${w.type}] `+w.q),
+        h('div',{class:'review-row my'}, h('div',{class:'k'},'내 답'), h('div',{class:'v'},w.my)),
+        h('div',{class:'review-row ans'}, h('div',{class:'k'},'정답'), h('div',{class:'v'},w.ans)),
+        h('div',{class:'review-explain'},'💡 '+w.explain)
+      );
+      list.appendChild(item);
+    });
+    rev.appendChild(list);
+    wrap.appendChild(rev);
+  } else {
+    wrap.appendChild(h('div',{class:'review-section'},
+      h('h3',{},'🎯 한 문제도 틀리지 않았어요!')));
+  }
+
+  wrap.appendChild(h('div',{class:'result-actions'},
+    h('button',{class:'btn btn-primary',onclick:sendResult},'📤 결과 전송하기'),
+    h('button',{class:'btn btn-ghost',onclick:()=>{state.phase='home';renderHome();}},'🏠 홈으로 돌아가기')
+  ));
+
+  app.appendChild(wrap);
+}
+
+function sendResult(){
+  if(!CONFIG.APPS_SCRIPT_URL){
+    toast('전송 URL이 설정되지 않았어요 (로컬 저장만 됨)');
+    saveLocal(); return;
+  }
+  toast('전송 중...');
+  const rate = state.total ? state.correct/state.total : 0;
+  const lv = levelInfo(rate);
+  const payload = {
+    name: state.name,
+    mode: state.mode==='challenge' ? '챌린지' : '연습',
+    stage: state.stage.id,
+    stageName: state.stage.name,
+    total: state.total,
+    correct: state.correct,
+    rate: Math.round(rate*100),
+    level: lv.title,
+    hearts: state.mode==='challenge' ? state.hearts : '-',
+    wrong: state.wrong.map(w=>`${w.type}/${w.q.replace(/<[^>]+>/g,'')}/내답:${w.my}/정답:${w.ans}`),
+    at: new Date().toISOString()
+  };
+  fetch(CONFIG.APPS_SCRIPT_URL, {
+    method:'POST',
+    
+    headers:{'Content-Type':'text/plain;charset=utf-8'},
+    body: JSON.stringify(payload)
+  }).then(()=>{ toast('✓ 전송 완료'); saveLocal(); })
+    .catch(()=>{ toast('전송 실패 — 로컬 저장만 됨'); saveLocal(); });
+}
+
+function saveLocal(){
+  const logs = JSON.parse(localStorage.getItem('rbd_logs')||'[]');
+  logs.push({name:state.name, mode:state.mode, stage:state.stage.id, correct:state.correct, total:state.total, at:Date.now()});
+  localStorage.setItem('rbd_logs', JSON.stringify(logs));
+}
+
+/* ========== 게임오버 / 종료 확인 ========== */
+function gameOver(){
+  state.phase='gameover';
+  const m = $('#modal');
+  m.classList.add('show');
+  m.innerHTML='';
+  m.appendChild(h('div',{class:'modal'},
+    h('div',{class:'modal-icon'},'💔'),
+    h('h3',{},'하트를 모두 잃었어요'),
+    h('p',{html:`${state.qIdx+1}번째 문제에서 멈췄어요.<br>처음부터 다시 도전할까요?`}),
+    h('div',{class:'modal-actions'},
+      h('button',{class:'btn btn-red',onclick:()=>{m.classList.remove('show');sfx.tap();startStage(state.stage.id);}},'다시 도전하기'),
+      h('button',{class:'btn btn-ghost',onclick:()=>{m.classList.remove('show');state.phase='home';renderHome();}},'홈으로 돌아가기')
+    )
+  ));
+}
+
+function confirmExit(){
+  const m=$('#modal'); m.classList.add('show'); m.innerHTML='';
+  m.appendChild(h('div',{class:'modal'},
+    h('div',{class:'modal-icon'},'🚪'),
+    h('h3',{},'정말 나가시겠어요?'),
+    h('p',{},'지금까지 푼 진도가 모두 사라져요.'),
+    h('div',{class:'modal-actions'},
+      h('button',{class:'btn btn-red',onclick:()=>{m.classList.remove('show');state.phase='home';renderHome();}},'나가기'),
+      h('button',{class:'btn btn-ghost',onclick:()=>m.classList.remove('show')},'계속 풀기')
+    )
+  ));
+}
+
+/* ========== 시작 ========== */
+renderHome();
+// 첫 탭에서 오디오 컨텍스트 활성화 (iOS 정책)
+document.addEventListener('touchstart', ()=>getAC(), {once:true});
+document.addEventListener('click', ()=>getAC(), {once:true});
+</script>
+</body>
+</html>
